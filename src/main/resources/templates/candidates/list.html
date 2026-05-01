@@ -13,13 +13,13 @@
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Имя</th>
-                <th scope="col">Дата создания</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="candidate: ${candidates}">
                 <td th:text="${candidate.id}" />
                 <td th:text="${candidate.name}" />
+                <td th:text="${candidate.description}" />
                 <td th:text="${candidate.creationDate}" />
             </tr>
             </tbody>
