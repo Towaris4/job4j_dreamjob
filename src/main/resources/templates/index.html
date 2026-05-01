@@ -8,39 +8,16 @@
 <div th:replace="fragments/navigation :: navigation"></div>
 <div class="container">
     <body>
-    <body>
-    <div class="container">
-        <div class="row">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>Larry</td>
-                    <td>the Bird</td>
-                    <td>@twitter</td>
-                </tr>
-                </tbody>
-            </table>
+    <!-- Основной контент -->
+    <div class="main-content">
+        <div class="container">
+            <h3 class="project-title">Проект job4j_dreamjob, выполняемый в рамках курса Job4j</h3>
+            <ul class="nav-list">
+                <li><a href="/vacancies">Вакансии</a></li>
+                <li><a href="/candidates">Кандидаты</a></li>
+                <li><a href="/vacancies/create">Создать вакансию</a></li>
+                <li><a href="/candidates/create">Создать резюме</a></li>
+            </ul>
         </div>
     </div>
     <footer th:include="fragments/blocks/footer :: footer"></footer>
