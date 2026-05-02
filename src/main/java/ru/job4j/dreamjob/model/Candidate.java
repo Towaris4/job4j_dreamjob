@@ -72,3 +72,4 @@ public class Candidate {
         return Objects.hash(id);
     }
 }
+
