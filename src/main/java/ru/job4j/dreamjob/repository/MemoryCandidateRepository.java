@@ -14,7 +14,7 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     private int nextId = 1;
 
-    private final Map<Integer, Candidate> Candidates = new HashMap<>();
+    private final Map<Integer, Candidate> candidates = new HashMap<>();
 
     private MemoryCandidateRepository() {
         save(new Candidate(0, "Ivan Tarasov", "The best worker", LocalDateTime.now()));
@@ -31,27 +31,26 @@ public class MemoryCandidateRepository implements CandidateRepository {
 
     public Candidate save(Candidate candidate) {
         candidate.setId(nextId++);
-        Candidates.put(candidate.getId(), candidate);
+        candidates.put(candidate.getId(), candidate);
         return candidate;
     }
 
     public void deleteById(int id) {
-        Candidates.remove(id);
+        candidates.remove(id);
     }
 
     public boolean update(Candidate candidate) {
-        return Candidates.computeIfPresent(candidate.getId(),
+        return candidates.computeIfPresent(candidate.getId(),
                 (id, oldCandidate) -> new Candidate(oldCandidate.getId(), candidate.getName(),
                         candidate.getDescription(),
                         candidate.getCreationDate())) != null;
     }
 
     public Optional<Candidate> findById(int id) {
-        return Optional.ofNullable(Candidates.get(id));
+        return Optional.ofNullable(candidates.get(id));
     }
 
-
     public Collection<Candidate> findAll() {
-        return Candidates.values();
+        return candidates.values();
     }
 }

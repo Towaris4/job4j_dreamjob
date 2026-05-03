@@ -33,6 +33,7 @@ public class VacancyController {
         return "redirect:/vacancies";
     }
 
+
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
         var vacancyOptional = vacancyRepository.findById(id);
