@@ -1,5 +1,6 @@
 package ru.job4j.dreamjob.repository;
 
+import net.jcip.annotations.ThreadSafe;
 import org.springframework.stereotype.Repository;
 import ru.job4j.dreamjob.model.Candidate;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 import java.util.Optional;
 
 @Repository
+@ThreadSafe
 public class MemoryCandidateRepository implements CandidateRepository {
 
     private int nextId = 1;
