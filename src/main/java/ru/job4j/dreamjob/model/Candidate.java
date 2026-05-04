@@ -58,6 +58,7 @@ public class Candidate {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
     public int getCityId() {
         return cityId;
     }
@@ -65,6 +66,7 @@ public class Candidate {
     public void setCityId(int cityId) {
         this.cityId = cityId;
     }
+
     public int getFileId() {
         return fileId;
     }

@@ -48,7 +48,6 @@ public class VacancyController {
         }
     }
 
-
     @GetMapping("/{id}")
     public String getById(Model model, @PathVariable int id) {
         var vacancyOptional = vacancyService.findById(id);
