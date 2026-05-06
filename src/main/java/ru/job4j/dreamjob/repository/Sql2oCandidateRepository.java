@@ -1,15 +1,19 @@
 package ru.job4j.dreamjob.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
 import ru.job4j.dreamjob.model.Candidate;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Optional;
 
 @Repository
 public class Sql2oCandidateRepository implements CandidateRepository {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Sql2oCandidateRepository.class);
     private final Sql2o sql2o;
 
     public Sql2oCandidateRepository(Sql2o sql2o) {
@@ -32,7 +36,10 @@ public class Sql2oCandidateRepository implements CandidateRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             candidate.setId(generatedId);
             return candidate;
+        } catch (Exception e) {
+            LOG.error("Ошибка при сохранении кандидата: name={}", candidate.getName(), e);
         }
+        return null;
     }
 
     @Override
@@ -42,6 +49,7 @@ public class Sql2oCandidateRepository implements CandidateRepository {
             query.addParameter("id", id);
             return query.executeUpdate().getResult() > 0;
         } catch (Exception e) {
+            LOG.error("Ошибка при удалении кандидата по id={}", id, e);
             return false;
         }
     }
@@ -64,6 +72,9 @@ public class Sql2oCandidateRepository implements CandidateRepository {
                     .addParameter("id", candidate.getId());
             var affectedRows = query.executeUpdate().getResult();
             return affectedRows > 0;
+        } catch (Exception e) {
+            LOG.error("Ошибка при обновлении кандидата id={}", candidate.getId(), e);
+            return false;
         }
     }
 
@@ -74,7 +85,10 @@ public class Sql2oCandidateRepository implements CandidateRepository {
             query.addParameter("id", id);
             var candidate = query.setColumnMappings(Candidate.COLUMN_MAPPING).executeAndFetchFirst(Candidate.class);
             return Optional.ofNullable(candidate);
+        } catch (Exception e) {
+            LOG.error("Ошибка при поиске кандидата по id={}", id, e);
         }
+        return Optional.empty();
     }
 
     @Override
@@ -82,6 +96,9 @@ public class Sql2oCandidateRepository implements CandidateRepository {
         try (var connection = sql2o.open()) {
             var query = connection.createQuery("SELECT * FROM candidates");
             return query.setColumnMappings(Candidate.COLUMN_MAPPING).executeAndFetch(Candidate.class);
+        } catch (Exception e) {
+            LOG.error("Ошибка при получении списка всех кандидатов", e);
         }
+        return new ArrayList<>();
     }
 }

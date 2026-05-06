@@ -1,5 +1,7 @@
 package ru.job4j.dreamjob.repository;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
@@ -11,6 +13,7 @@ import java.util.Optional;
 @Primary
 public class Sql2oFileRepository implements FileRepository {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Sql2oFileRepository.class);
     private final Sql2o sql2o;
 
     public Sql2oFileRepository(Sql2o sql2o) {
@@ -26,7 +29,10 @@ public class Sql2oFileRepository implements FileRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             file.setId(generatedId);
             return file;
+        } catch (Exception e) {
+            LOG.error("Не удалось сохранить файл: name={}, path={}", file.getName(), file.getPath(), e);
         }
+        return null;
     }
 
     @Override
@@ -35,7 +41,10 @@ public class Sql2oFileRepository implements FileRepository {
             var query = connection.createQuery("SELECT * FROM files WHERE id = :id");
             var file = query.addParameter("id", id).executeAndFetchFirst(File.class);
             return Optional.ofNullable(file);
+        } catch (Exception e) {
+            LOG.error("Не удалось найти файл по id={}", id, e);
         }
+        return Optional.empty();
     }
 
     @Override
@@ -44,7 +53,8 @@ public class Sql2oFileRepository implements FileRepository {
             var query = connection.createQuery("DELETE FROM files WHERE id = :id");
             return query.addParameter("id", id).executeUpdate().getResult() > 0;
         } catch (Exception e) {
-            return false;
+            LOG.error("Не удалось удалить файл по id={}", id, e);
         }
+        return false;
     }
 }

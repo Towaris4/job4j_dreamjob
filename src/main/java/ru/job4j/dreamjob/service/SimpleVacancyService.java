@@ -48,7 +48,6 @@ public class SimpleVacancyService implements VacancyService {
         if (isNewFileEmpty) {
             return vacancyRepository.update(vacancy);
         }
-        /* если передан новый не пустой файл, то старый удаляем, а новый сохраняем */
         var oldFileId = vacancy.getFileId();
         saveNewFile(vacancy, image);
         var isUpdated = vacancyRepository.update(vacancy);
