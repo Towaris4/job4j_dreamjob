@@ -37,12 +37,14 @@ public class SimpleCandidateService implements CandidateService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public boolean deleteById(int id) {
         var fileOptional = findById(id);
         if (fileOptional.isPresent()) {
             candidateRepository.deleteById(id);
             fileService.deleteById(fileOptional.get().getFileId());
+            return true;
         }
+        return false;
     }
 
     @Override
@@ -51,7 +53,6 @@ public class SimpleCandidateService implements CandidateService {
         if (isNewFileEmpty) {
             return candidateRepository.update(candidate);
         }
-        /* если передан новый не пустой файл, то старый удаляем, а новый сохраняем */
         var oldFileId = candidate.getFileId();
         saveNewFile(candidate, image);
         var isUpdated = candidateRepository.update(candidate);

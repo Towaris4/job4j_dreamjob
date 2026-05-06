@@ -72,12 +72,14 @@ public class SimpleFileService implements FileService {
     }
 
     @Override
-    public void deleteById(int id) {
+    public boolean deleteById(int id) {
         var fileOptional = fileRepository.findById(id);
         if (fileOptional.isPresent()) {
             deleteFile(fileOptional.get().getPath());
             fileRepository.deleteById(id);
+            return true;
         }
+        return false;
     }
 
     private void deleteFile(String path) {

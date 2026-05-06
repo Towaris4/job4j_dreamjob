@@ -35,8 +35,11 @@ public class MemoryCandidateRepository implements CandidateRepository {
         return candidate;
     }
 
-    public void deleteById(int id) {
-        candidates.remove(id);
+    public boolean deleteById(int id) {
+        if (candidates.remove(id) != null) {
+            return true;
+        }
+        return false;
     }
 
     public boolean update(Candidate candidate) {

@@ -17,7 +17,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class MemoryVacancyRepository implements VacancyRepository {
 
     private final AtomicInteger nextId = new AtomicInteger(1);
-
     private final Map<Integer, Vacancy> vacancies = new ConcurrentHashMap<>();
 
     private MemoryVacancyRepository() {
@@ -37,8 +36,11 @@ public class MemoryVacancyRepository implements VacancyRepository {
     }
 
     @Override
-    public void deleteById(int id) {
-        vacancies.remove(id);
+    public boolean deleteById(int id) {
+        if (vacancies.remove(id) != null) {
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface CandidateService {
     Candidate save(Candidate candidate, FileDto image);
 
-    void deleteById(int id);
+    boolean deleteById(int id);
 
     boolean update(Candidate candidate, FileDto image);
 

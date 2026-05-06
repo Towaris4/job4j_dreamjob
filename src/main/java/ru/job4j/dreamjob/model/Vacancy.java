@@ -70,6 +70,7 @@ public class Vacancy {
     public void setCreationDate(LocalDateTime creationDate) {
         this.creationDate = creationDate;
     }
+
     public boolean getVisible() {
         return visible;
     }
@@ -77,6 +78,7 @@ public class Vacancy {
     public void setVisible(boolean visible) {
         this.visible = visible;
     }
+
     public int getCityId() {
         return cityId;
     }
@@ -84,6 +86,7 @@ public class Vacancy {
     public void setCityId(int cityId) {
         this.cityId = cityId;
     }
+
     public int getFileId() {
         return fileId;
     }
