@@ -10,8 +10,10 @@
             <input type="text" class="form-control" id="name" name="name" placeholder="Имя кандидата">
         </div>
         <div class="mb-3">
-            <label for="formFile"><b>Фото</b></label>
-            <input class="form-control form-control-sm w-100" type="file" id="formFile" name="file" required>
+            <label for="formFile" class="form-label"><b>Фото</b></label>
+            <input type="file" class="form-control" id="formFile" name="file"
+                   style="padding: 0.250rem 0.5rem; border-radius: 0.375rem;" required>
+            <div class="form-text">Поддерживаемые форматы: JPG, PNG, GIF. Максимальный размер: 5MB</div>
         </div>
         <div class="mb-3">
             <label for="description" class="form-label"><b>Описание</b></label>

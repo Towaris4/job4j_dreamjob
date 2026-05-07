@@ -23,8 +23,13 @@ public class UserController {
     }
 
     @GetMapping("/users/register")
-    public String getCreationPage(Model model) {
-        model.addAttribute("user", new User());
+    public String getCreationPage(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         return "users/register";
     }
 
@@ -39,7 +44,13 @@ public class UserController {
     }
 
     @GetMapping("/users/login")
-    public String getLoginPage() {
+    public String getLoginPage(Model model, HttpSession session) {
+        var user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
         return "users/login";
     }
 
@@ -55,7 +66,7 @@ public class UserController {
         return "redirect:/vacancies";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/users/logout")
     public String logout(HttpSession session) {
         session.invalidate();
         return "redirect:/users/login";
