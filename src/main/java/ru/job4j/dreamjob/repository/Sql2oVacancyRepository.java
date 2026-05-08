@@ -4,8 +4,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 import ru.job4j.dreamjob.model.Vacancy;
 
+import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Optional;
@@ -37,8 +39,13 @@ public class Sql2oVacancyRepository implements VacancyRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             vacancy.setId(generatedId);
             return vacancy;
-        } catch (Exception e) {
-            LOG.error("Ошибка при сохранении вакансии: {}", vacancy.getTitle(), e);
+        } catch (Sql2oException e) {
+            if (e.getCause() instanceof SQLException) {
+                SQLException sqlEx = (SQLException) e.getCause();
+                if ("23505".equals(sqlEx.getSQLState())) {
+                    LOG.error("Такая вакансия уже существует: {}", vacancy.getTitle(), e);
+                }
+            }
             return null;
         }
     }
