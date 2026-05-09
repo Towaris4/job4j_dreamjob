@@ -4,7 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 import ru.job4j.dreamjob.model.Candidate;
+import java.sql.SQLException;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,10 +38,15 @@ public class Sql2oCandidateRepository implements CandidateRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             candidate.setId(generatedId);
             return candidate;
-        } catch (Exception e) {
-            LOG.error("Ошибка при сохранении кандидата: name={}", candidate.getName(), e);
+        } catch (Sql2oException e) {
+            if (e.getCause() instanceof SQLException) {
+                SQLException sqlEx = (SQLException) e.getCause();
+                if ("23505".equals(sqlEx.getSQLState())) {
+                    LOG.error("Такой кандидат уже существует: name={}", candidate.getName(), e);
+                }
+            }
+            return null;
         }
-        return null;
     }
 
     @Override
