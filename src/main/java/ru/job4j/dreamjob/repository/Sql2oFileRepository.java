@@ -31,13 +31,8 @@ public class Sql2oFileRepository implements FileRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             file.setId(generatedId);
             return file;
-        } catch (Sql2oException e) {
-            if (e.getCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getCause();
-                if ("23505".equals(sqlEx.getSQLState())) {
-                    LOG.error("Такой файл уже существует: name={}, path={}", file.getName(), file.getPath(), e);
-                }
-            }
+        } catch (Exception e) {
+            LOG.error("Ошибка при сохранении файла: name={}, path={}", file.getName(), file.getPath(), e);
             return null;
         }
     }

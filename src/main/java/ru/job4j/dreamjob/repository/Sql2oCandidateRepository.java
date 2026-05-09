@@ -38,13 +38,8 @@ public class Sql2oCandidateRepository implements CandidateRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             candidate.setId(generatedId);
             return candidate;
-        } catch (Sql2oException e) {
-            if (e.getCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getCause();
-                if ("23505".equals(sqlEx.getSQLState())) {
-                    LOG.error("Такой кандидат уже существует: name={}", candidate.getName(), e);
-                }
-            }
+        } catch (Exception e) {
+            LOG.error("Ошибка при сохранении кандидата: name={}", candidate.getName(), e);
             return null;
         }
     }

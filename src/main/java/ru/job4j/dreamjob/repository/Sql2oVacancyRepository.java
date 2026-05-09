@@ -39,13 +39,8 @@ public class Sql2oVacancyRepository implements VacancyRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             vacancy.setId(generatedId);
             return vacancy;
-        } catch (Sql2oException e) {
-            if (e.getCause() instanceof SQLException) {
-                SQLException sqlEx = (SQLException) e.getCause();
-                if ("23505".equals(sqlEx.getSQLState())) {
-                    LOG.error("Такая вакансия уже существует: {}", vacancy.getTitle(), e);
-                }
-            }
+        } catch (Exception e) {
+            LOG.error("Ошибка при сохранении вакансии: {}", vacancy.getTitle(), e);
             return null;
         }
     }
@@ -57,7 +52,6 @@ public class Sql2oVacancyRepository implements VacancyRepository {
             query.addParameter("id", id);
             return query.executeUpdate().getResult() > 0;
         } catch (Exception e) {
-            // Исправлен синтаксис логирования: добавлен {} для параметра
             LOG.error("Ошибка при удалении вакансии с id: {}", id, e);
             return false;
         }
