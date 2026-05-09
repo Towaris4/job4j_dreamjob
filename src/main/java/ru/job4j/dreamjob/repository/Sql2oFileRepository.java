@@ -5,8 +5,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 import ru.job4j.dreamjob.model.File;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 @Repository
@@ -29,10 +31,15 @@ public class Sql2oFileRepository implements FileRepository {
             int generatedId = query.executeUpdate().getKey(Integer.class);
             file.setId(generatedId);
             return file;
-        } catch (Exception e) {
-            LOG.error("Не удалось сохранить файл: name={}, path={}", file.getName(), file.getPath(), e);
+        } catch (Sql2oException e) {
+            if (e.getCause() instanceof SQLException) {
+                SQLException sqlEx = (SQLException) e.getCause();
+                if ("23505".equals(sqlEx.getSQLState())) {
+                    LOG.error("Такой файл уже существует: name={}, path={}", file.getName(), file.getPath(), e);
+                }
+            }
+            return null;
         }
-        return null;
     }
 
     @Override
